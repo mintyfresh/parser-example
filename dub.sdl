@@ -1,0 +1,5 @@
+name "compiler-sample"
+description "A minimal D application."
+authors "Minty Fresh"
+copyright "Copyright © 2023, Minty Fresh"
+license "proprietary"
