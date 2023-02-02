@@ -2,14 +2,17 @@ module parser.tree.assignment_node;
 
 import parser.tree.binary_node;
 import parser.tree.expression_node;
+import parser.tree.visitable;
 
-class AssignmentNode : BinaryNode
+class AssignmentNode(T) : BinaryNode!(T)
 {
+    mixin Visitable!(T);
+
 private:
     string _operator;
 
 public:
-    this(string operator, ExpressionNode left, ExpressionNode right)
+    this(string operator, ExpressionNode!(T) left, ExpressionNode!(T) right)
     {
         super(left, right);
 

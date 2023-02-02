@@ -131,15 +131,6 @@ enum Rules : Rule
         exact!("=")
     ),
 
-    opShiftLeft = Rule(
-        "opShiftLeft",
-        exact!("<<")
-    ),
-    opShiftRight = Rule(
-        "opShiftRight",
-        exact!(">>")
-    ),
-
     opAdd = Rule(
         "opAdd",
         exact!("+")

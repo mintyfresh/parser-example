@@ -2,14 +2,17 @@ module parser.tree.arithmetic_node;
 
 import parser.tree.binary_node;
 import parser.tree.expression_node;
+import parser.tree.visitable;
 
-class ArithmeticNode : BinaryNode
+class ArithmeticNode(T) : BinaryNode!(T)
 {
+    mixin Visitable!(T);
+
 private:
     string _operator;
 
 public:
-    this(string operator, ExpressionNode left, ExpressionNode right)
+    this(string operator, ExpressionNode!(T) left, ExpressionNode!(T) right)
     {
         super(left, right);
 

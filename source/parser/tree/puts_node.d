@@ -2,20 +2,23 @@ module parser.tree.puts_node;
 
 import parser.tree.expression_node;
 import parser.tree.node;
+import parser.tree.visitable;
 
-class PutsNode : Node
+class PutsNode(T) : Node!(T)
 {
+    mixin Visitable!(T);
+
 private:
-    ExpressionNode _expression;
+    ExpressionNode!(T) _expression;
 
 public:
-    this(ExpressionNode expression)
+    this(ExpressionNode!(T) expression)
     {
         _expression = expression;
     }
 
     @property
-    const(ExpressionNode) expression() const
+    const(ExpressionNode!(T)) expression() const
     {
         return _expression;
     }

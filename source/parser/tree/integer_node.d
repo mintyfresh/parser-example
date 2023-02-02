@@ -1,9 +1,12 @@
 module parser.tree.integer_node;
 
 import parser.tree.expression_node;
+import parser.tree.visitable;
 
-class IntegerNode : ExpressionNode
+class IntegerNode(T) : ExpressionNode!(T)
 {
+    mixin Visitable!(T);
+
 private:
     long _value;
 

@@ -3,28 +3,31 @@ module parser.tree.variable_declaration_node;
 import parser.tree.expression_node;
 import parser.tree.identifier_node;
 import parser.tree.node;
+import parser.tree.visitable;
 
-class VariableDeclarationNode : Node
+class VariableDeclarationNode(T) : Node!(T)
 {
+    mixin Visitable!(T);
+
 private:
-    IdentifierNode _left;
-    ExpressionNode _right;
+    IdentifierNode!(T) _left;
+    ExpressionNode!(T) _right;
 
 public:
-    this(IdentifierNode left, ExpressionNode right)
+    this(IdentifierNode!(T) left, ExpressionNode!(T) right)
     {
         _left  = left;
         _right = right;
     }
 
     @property
-    const(IdentifierNode) left() const
+    const(IdentifierNode!(T)) left() const
     {
         return _left;
     }
 
     @property
-    const(ExpressionNode) right() const
+    const(ExpressionNode!(T)) right() const
     {
         return _right;
     }

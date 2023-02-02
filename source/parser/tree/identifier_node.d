@@ -1,28 +1,31 @@
 module parser.tree.identifier_node;
 
 import parser.tree.expression_node;
+import parser.tree.visitable;
 
-class IdentifierNode : ExpressionNode
+class IdentifierNode(T) : ExpressionNode!(T)
 {
+    mixin Visitable!(T);
+
 private:
-    string _value;
+    string _name;
 
 public:
-    this(string value)
+    this(string name)
     {
-        _value = value;
+        _name = name;
     }
 
     @property
-    string value() const
+    string name() const
     {
-        return _value;
+        return _name;
     }
 
     override string toString() const
     {
         import std.string : format;
 
-        return "IdentifierNode(value: %s)".format(value);
+        return "IdentifierNode(name: %s)".format(name);
     }
 }

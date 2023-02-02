@@ -10,7 +10,7 @@ import lexer.token;
 
 import std.traits : ForeachType;
 
-struct Parser(TokenStream)
+struct Parser(T, TokenStream)
     if (is(ForeachType!(TokenStream) == Token))
 {
 private:
@@ -23,9 +23,9 @@ public:
         _tokens = tokens;
     }
 
-    Node parse()
+    Node!(T) parse()
     {
-        Node[] statements;
+        Node!(T)[] statements;
 
         while (!accept(Rules.eof))
         {
@@ -34,37 +34,37 @@ public:
 
         expect(Rules.eof);
 
-        return new RootNode(statements);
+        return new RootNode!(T)(statements);
     }
 
-    Node statement()
+    Node!(T) statement()
     {
         if (accept(Rules.keyLet))
         {
             expect(Rules.identifier);
-            auto left = new IdentifierNode(_prev.value);
+            auto left = new IdentifierNode!(T)(_prev.value);
 
             expect(Rules.opAssign);
             auto right = expression();
 
-            return new VariableDeclarationNode(left, right);
+            return new VariableDeclarationNode!(T)(left, right);
         }
 
         if (accept(Rules.keyPuts))
         {
             auto expr = expression();
-            return new PutsNode(expr);
+            return new PutsNode!(T)(expr);
         }
 
         return expression();
     }
 
-    ExpressionNode expression()
+    ExpressionNode!(T) expression()
     {
         return assignment();
     }
 
-    ExpressionNode assignment()
+    ExpressionNode!(T) assignment()
     {
         auto left = bitwise();
 
@@ -73,13 +73,13 @@ public:
             auto operator = _prev.value;
             auto right = bitwise();
 
-            return new AssignmentNode(operator, left, right);
+            return new AssignmentNode!(T)(operator, left, right);
         }
 
         return left;
     }
 
-    ExpressionNode bitwise()
+    ExpressionNode!(T) bitwise()
     {
         auto left = additive();
 
@@ -88,13 +88,13 @@ public:
             auto operator = _prev.value;
             auto right = bitwise();
 
-            return new ArithmeticNode(operator, left, right);
+            return new ArithmeticNode!(T)(operator, left, right);
         }
 
         return left;
     }
 
-    ExpressionNode additive()
+    ExpressionNode!(T) additive()
     {
         auto left = multiplicative();
 
@@ -103,13 +103,13 @@ public:
             auto operator = _prev.value;
             auto right = additive();
 
-            return new ArithmeticNode(operator, left, right);
+            return new ArithmeticNode!(T)(operator, left, right);
         }
 
         return left;
     }
 
-    ExpressionNode multiplicative()
+    ExpressionNode!(T) multiplicative()
     {
         auto left = terminal();
 
@@ -118,13 +118,13 @@ public:
             auto operator = _prev.value;
             auto right = multiplicative();
 
-            return new ArithmeticNode(operator, left, right);
+            return new ArithmeticNode!(T)(operator, left, right);
         }
 
         return left;
     }
 
-    ExpressionNode terminal()
+    ExpressionNode!(T) terminal()
     {
         import std.string : format;
 
@@ -132,11 +132,11 @@ public:
         {
             import std.conv : to;
 
-            return new IntegerNode(_prev.value.to!(long));
+            return new IntegerNode!(T)(_prev.value.to!(long));
         }
         if (accept(Rules.identifier))
         {
-            return new IdentifierNode(_prev.value);
+            return new IdentifierNode!(T)(_prev.value);
         }
         if (accept(Rules.parenLeft))
         {
@@ -183,8 +183,8 @@ private:
     }
 }
 
-auto makeParser(TokenStream)(TokenStream tokens)
+auto makeParser(T, TokenStream)(TokenStream tokens)
     if (is(ForeachType!(TokenStream) == Token))
 {
-    return Parser!(TokenStream)(tokens);
+    return Parser!(T, TokenStream)(tokens);
 }

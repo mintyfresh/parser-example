@@ -2,27 +2,27 @@ module parser.tree.binary_node;
 
 import parser.tree.expression_node;
 
-abstract class BinaryNode : ExpressionNode
+abstract class BinaryNode(T) : ExpressionNode!(T)
 {
 private:
-    ExpressionNode _left;
-    ExpressionNode _right;
+    ExpressionNode!(T) _left;
+    ExpressionNode!(T) _right;
 
 public:
-    this(ExpressionNode left, ExpressionNode right)
+    this(ExpressionNode!(T) left, ExpressionNode!(T) right)
     {
         _left  = left;
         _right = right;
     }
 
     @property
-    const(ExpressionNode) left() const
+    const(ExpressionNode!(T)) left() const
     {
         return _left;
     }
 
     @property
-    const(ExpressionNode) right() const
+    const(ExpressionNode!(T)) right() const
     {
         return _right;
     }

@@ -1,20 +1,23 @@
 module parser.tree.root_node;
 
 import parser.tree.node;
+import parser.tree.visitable;
 
-class RootNode : Node
+class RootNode(T) : Node!(T)
 {
+    mixin Visitable!(T);
+
 private:
-    Node[] _statements;
+    Node!(T)[] _statements;
 
 public:
-    this(Node[] statements)
+    this(Node!(T)[] statements)
     {
         _statements = statements;
     }
 
     @property
-    Node[] statements()
+    const(Node!(T)[]) statements() const
     {
         return _statements;
     }
